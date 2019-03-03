@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "moment": "^2.22.0",
     "react": "16.6.3",
     "react-native": "0.58.6"
   },
@@ -19,5 +20,10 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts"
+    ]
   }
 }
