@@ -1,5 +1,11 @@
 import React from 'react'
-import { Text, View, StyleSheet, ImageBackground } from 'react-native'
+import {
+	Text,
+	View,
+	StyleSheet,
+	ImageBackground,
+	FlatList
+} from 'react-native'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import todayImage from '../../assets/imgs/today.jpg'
@@ -8,6 +14,59 @@ import CommonStyles from '../CommonStyles'
 import Task from '../components/Task'
 
 export default class Agenda extends React.Component {
+	state = {
+		tasks: [
+			{
+				id: Math.random(),
+				description: 'Comprar curso de React native',
+				estimateAt: new Date(),
+				doneAt: new Date()
+			},
+			{
+				id: Math.random(),
+				description: 'Concluir o curso',
+				estimateAt: new Date(),
+				doneAt: null
+			},
+			{
+				id: Math.random(),
+				description: 'Comprar curso de React native',
+				estimateAt: new Date(),
+				doneAt: new Date()
+			},
+			{
+				id: Math.random(),
+				description: 'Concluir o curso',
+				estimateAt: new Date(),
+				doneAt: null
+			},
+			{
+				id: Math.random(),
+				description: 'Comprar curso de React native',
+				estimateAt: new Date(),
+				doneAt: new Date()
+			},
+			{
+				id: Math.random(),
+				description: 'Concluir o curso',
+				estimateAt: new Date(),
+				doneAt: null
+			},
+			{
+				id: Math.random(),
+				description: 'Comprar curso de React native',
+				estimateAt: new Date(),
+				doneAt: new Date()
+			},
+			{
+				id: Math.random(),
+				description: 'Concluir o curso',
+				estimateAt: new Date(),
+				doneAt: null
+			},
+		]
+	}
+
 	render () {
 		return (
 			<View style={styles.container}>
@@ -21,14 +80,10 @@ export default class Agenda extends React.Component {
 				</ImageBackground>
 
 				<View style={styles.tasksContainer}>
-					<Task
-						description="Tarefa Pendente"
-						estimateAt={new Date()}
-						doneAt={null}/>
-					<Task
-						description="Tarefa Concluída"
-						estimateAt={new Date()}
-						doneAt={new Date()}/>
+					<FlatList
+						data={this.state.tasks}
+						keyExtractor={item => `${item.id}`}
+						renderItem={({item}) => <Task { ...item } />} />
 				</View>
 			</View>
 		)
