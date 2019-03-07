@@ -78,7 +78,7 @@ export default class Agenda extends React.Component {
 	addTask = task => {
 		const tasks = [...this.state.tasks]
 		tasks.push({
-			id: Math.randon(),
+			id: Math.random(),
 			description: task.description,
 			estimateAt: task.date,
 			doneAt: null
@@ -125,7 +125,7 @@ export default class Agenda extends React.Component {
 			<View style={styles.container}>
 				<AddTask isVisible={this.state.showAddTask}
 					onSave={this.addTask}
-					onCancel={() => this.setState({ showAddTask: true }) }/>
+					onCancel={() => this.setState({ showAddTask: false }) }/>
 				<ImageBackground source={todayImage} style={styles.background}>
 					<View style={styles.iconBar}>
 						<TouchableOpacity onPress={this.toggleFilter}>
@@ -137,7 +137,7 @@ export default class Agenda extends React.Component {
 					<View style={styles.titleBar}>
 						<Text style={styles.title}>Hoje</Text>
 						<Text style={styles.subtitle}>
-							{moment().locale('pt-br').format('ddd, D [de] MMMM')}
+							{moment().locale('pt-br').format('ddd, D [de] MMMM [de] YYYY')}
 						</Text>
 					</View>
 				</ImageBackground>

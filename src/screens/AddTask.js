@@ -7,6 +7,7 @@ import {
 	TextInput,
 	DatePickerIOS,
 	DatePickerAndroid,
+	Platform,
 	TouchableWithoutFeedback,
 	TouchableOpacity,
 	Alert
@@ -30,7 +31,35 @@ export default class AddTask extends React.Component {
 		this.setState({ ...initialState })
 	}
 
+	handleDateAndroidChanged = () => {
+		DatePickerAndroid.open({
+			date: this.state.date
+		}).then(e => {
+			if (e.action !== DatePickerAndroid.dismissedAction) {
+				const momentDate = moment(this.state.date)
+				momentDate.date(e.day)
+				momentDate.month(e.month)
+				momentDate.year(e.year)
+				this.setState({ date: momentDate.toDate()})
+			}
+		})
+	}
+
 	render() {
+		let datePicker = null
+		if(Platform.OS === 'ios') {
+			datePicker = <DatePickerIOS mode='date' date={this.state.date}
+							onDateChange={date => this.setState({ date })} />
+		} else {
+			datePicker = (
+				<TouchableOpacity onPress={this.handleDateAndroidChanged}>
+					<Text style={styles.date}>
+						{moment(this.state.date).format('ddd, D [de] MMMM [de] YYYY')}
+					</Text>
+				</TouchableOpacity>
+			)
+		}
+
 		return (
 			<Modal onRequestClose={this.props.onCancel}
 				visible={this.props.isVisible}
@@ -47,8 +76,7 @@ export default class AddTask extends React.Component {
 						onChangeText={description => this.setState({ description })}
 						value={this.state.description}/>
 
-					<DatePickerIOS mode='date' date={this.state.date}
-						onDateChange={date => this.setState({ date })} />
+					{datePicker}
 
 					<View style={{
 						flexDirection: 'row',
@@ -57,15 +85,15 @@ export default class AddTask extends React.Component {
 						<TouchableOpacity onPress={this.props.onCancel}>
 							<Text style={styles.button}>Cancelar</Text>
 						</TouchableOpacity>
-						<TouchableOpacity onPress={this.props.save}>
+						<TouchableOpacity onPress={this.save}>
 							<Text style={styles.button}>Salvar</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 
-				<TouchableOpacity onPress={this.props.onCancel}>
+				<TouchableWithoutFeedback onPress={this.props.onCancel}>
 					<View style={styles.offset}></View>
-				</TouchableOpacity>
+				</TouchableWithoutFeedback>
 
 			</Modal>
 		)
@@ -104,5 +132,12 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: '#e3e3e3',
 		borderRadius: 5
+	},
+	date: {
+		fontFamily: CommonStyles.fontFamily,
+		fontSize: 20,
+		marginLeft: 10,
+		marginTop: 10,
+		textAlign: 'center'
 	}
 })
