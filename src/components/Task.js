@@ -1,9 +1,16 @@
 import React from 'react'
-import { StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native'
+import {
+	StyleSheet,
+	Text,
+	View,
+	TouchableWithoutFeedback,
+	TouchableOpacity
+} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import moment from 'moment'
 import 'moment/locale/pt-br'
 import commonStyles from '../CommonStyles'
+import Swipeable from 'react-native-swipeable'
 
 export default props => {
 	let check = null
@@ -21,20 +28,45 @@ export default props => {
 	const deskStyle = props.doneAt !== null ?
 		{ textDecorationLine: 'line-through' } : {}
 
-	return (
-		<View style={styles.container}>
-			<TouchableWithoutFeedback onPress={() => props.toggleTask(props.id)} >
-				<View style={styles.checkContainer}>{check}</View>
-			</TouchableWithoutFeedback>
-			<View>
-				<Text style={[styles.description, deskStyle]}>
-					{props.description}
-				</Text>
-				<Text style={styles.date}>
-					{moment(props.estimateAt).locale('pt-br').format('ddd, D [de] MMMM')}
-				</Text>
-			</View>
+	const leftContent = (
+		<View style={styles.exclude}>
+			<Icon name='trash'
+				size={20}
+				color='#fff' />
+			<Text style={styles.excludeText}>Excluir</Text>
 		</View>
+		)
+
+	const rightContent = [
+		<TouchableOpacity
+			style={[styles.exclude, {justifyContent: 'flex-start', paddingLeft: 20 }]}
+			onPress={() => props.onDelete(props.id)}>
+			<Icon name='trash'
+				size={30}
+				color='#fff' />
+		</TouchableOpacity>,
+	]
+
+	return (
+		<Swipeable
+			leftActivationDistance={200}
+			onLeftActionActivate={() => props.onDelete(props.id) }
+			leftContent={leftContent}
+			rightButtons={rightContent}>
+			<View style={styles.container}>
+				<TouchableWithoutFeedback onPress={() => props.onToggleTask(props.id)} >
+					<View style={styles.checkContainer}>{check}</View>
+				</TouchableWithoutFeedback>
+				<View>
+					<Text style={[styles.description, deskStyle]}>
+						{props.description}
+					</Text>
+					<Text style={styles.date}>
+						{moment(props.estimateAt).locale('pt-br').format('ddd, D [de] MMMM')}
+					</Text>
+				</View>
+			</View>
+		</Swipeable>
 	)
 }
 
@@ -74,5 +106,18 @@ const styles = StyleSheet.create({
 		fontFamily: commonStyles.fontFamily,
 		color: commonStyles.colors.mainText,
 		fontSize: 12
+	},
+	exclude: {
+		flex: 1,
+		backgroundColor: 'red',
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+		alignItems: 'center'
+	},
+	excludeText: {
+		fontFamily: commonStyles.fontFamily,
+		color: '#fff',
+		fontSize: 20,
+		margin: 10
 	}
 })

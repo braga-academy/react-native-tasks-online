@@ -20,56 +20,7 @@ import Task from '../components/Task'
 
 export default class Agenda extends React.Component {
 	state = {
-		tasks: [
-			{
-				id: Math.random(),
-				description: 'Comprar curso de React native',
-				estimateAt: new Date(),
-				doneAt: new Date()
-			},
-			{
-				id: Math.random(),
-				description: 'Concluir o curso',
-				estimateAt: new Date(),
-				doneAt: null
-			},
-			{
-				id: Math.random(),
-				description: 'Comprar curso de React native',
-				estimateAt: new Date(),
-				doneAt: new Date()
-			},
-			{
-				id: Math.random(),
-				description: 'Concluir o curso',
-				estimateAt: new Date(),
-				doneAt: null
-			},
-			{
-				id: Math.random(),
-				description: 'Comprar curso de React native',
-				estimateAt: new Date(),
-				doneAt: new Date()
-			},
-			{
-				id: Math.random(),
-				description: 'Concluir o curso',
-				estimateAt: new Date(),
-				doneAt: null
-			},
-			{
-				id: Math.random(),
-				description: 'Comprar curso de React native',
-				estimateAt: new Date(),
-				doneAt: new Date()
-			},
-			{
-				id: Math.random(),
-				description: 'Concluir o curso',
-				estimateAt: new Date(),
-				doneAt: null
-			},
-		],
+		tasks: [],
 		visibleTasks: [],
 		showTasksDone: true,
 		showAddTask: false
@@ -85,6 +36,11 @@ export default class Agenda extends React.Component {
 		})
 
 		this.setState({tasks, showAddTask: false }, this.filterTasks)
+	}
+
+	deleteTask = id => {
+		const tasks = this.state.tasks.filter(task => task.id !== id)
+		this.setState({tasks}, this.filterTasks)
 	}
 
 	filterTasks = () => {
@@ -147,7 +103,8 @@ export default class Agenda extends React.Component {
 						data={this.state.visibleTasks}
 						keyExtractor={item => `${item.id}`}
 						renderItem={({item}) =>
-							<Task { ...item } toggleTask={this.toggleTask} />} />
+							<Task { ...item } onToggleTask={this.toggleTask}
+								onDelete={this.deleteTask}/>} />
 				</View>
 
 				<ActionButton buttonColor={CommonStyles.colors.today}
